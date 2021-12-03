@@ -22,7 +22,7 @@ Scoring/
   
 ## 実行方法
 
-1. moodleから採点したいファイルをダウンロードする
+1. 採点したいファイルをダウンロードする
 2. `files/`ディレクトリを作成し、ダウンロードしたファイルを入れる
 3. エディターの一括検索、置換機能を使いmalloc部分を自分の実行環境に書き換える
   - `s = (char *)malloc((size_t)(size.__pos + 1)*sizeof(char));` -> `// s = (char *)malloc((size_t)(size.__pos + 1)*sizeof(char));`
