@@ -21,7 +21,7 @@ def rename_files():
 
 
 def calc_score():
-    files_dir = "prog2"
+    files_dir = "files"
     files_extension = ".c"
     src_dir = "src"
     excel_file = "saiten.xlsx"
@@ -64,3 +64,7 @@ def calc_score():
 if __name__ == "__main__":
     # moodle からダウンロードしたファイルをrenameしたいとき
     rename_files()
+
+
+    # ファイルを実行しexcelファイルに記入したいとき
+    # calc_score()
