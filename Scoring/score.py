@@ -8,7 +8,7 @@ import openpyxl
 
 def rename_files():
     # ファイルのrename
-    files_dir = "prog2"
+    files_dir = "files"
     files_extension = ".c"
 
     files = glob.glob(f"./{files_dir}/*{files_extension}")
@@ -17,7 +17,7 @@ def rename_files():
         map(lambda file: file.split()[0].replace("./{files_dir}/", ""), files)
     )
     for index, file in enumerate(files):
-        os.rename(file, f"./{files_dir}/{student_num_list[index]}{files_extension}")
+        os.rename(file, f"{student_num_list[index]}{files_extension}")
 
 
 def calc_score():
@@ -25,7 +25,8 @@ def calc_score():
     files_extension = ".c"
     src_dir = "src"
     excel_file = "saiten.xlsx"
-    excel_sheet_name = "4回プログラミング演習"
+    excel_sheet_name = "Sheet2"
+    gcc_out_file = "./a.exe"
     files = glob.glob(f"./{files_dir}/*{files_extension}")
     input_files = glob.glob(f"./{src_dir}/*.txt")
     wb = openpyxl.load_workbook(excel_file)
@@ -34,15 +35,15 @@ def calc_score():
     for student_index, file in enumerate(files):
         # 学籍番号をシートに書き込み
         cell = ws.cell(row=student_index + 1, column=1)
-        cell.value = file.replace(f"./{files_dir}/", "").replace(files_extension, "")
+        cell.value = file.replace("\\", "/").replace(f"./{files_dir}/", "").replace(files_extension, "")
 
         for input_index, input in enumerate(input_files):
             shutil.copy(input, "./input.txt")
             os.system("gcc %s" % file)
             # 正しくコンパイルされ a.outがあるか
-            if os.path.exists("./a.out"):
+            if os.path.exists(gcc_out_file):
                 result = (
-                    subprocess.Popen("./a.out", stdout=subprocess.PIPE)
+                    subprocess.Popen(gcc_out_file, stdout=subprocess.PIPE)
                     .communicate()[0]
                     .decode("utf-8")
                 )
@@ -51,7 +52,7 @@ def calc_score():
                 output_cell = ws.cell(row=student_index + 1, column=input_index + 2)
                 output_cell.value = result
                 # a.outを削除
-                os.remove("./a.out")
+                os.remove(gcc_out_file)
             else:
                 # 出力をシートに書き込み
                 output_cell = ws.cell(row=student_index + 1, column=input_index + 2)
